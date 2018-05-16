@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android">
+     <item
+         android:id="@android:id/background"
+         android:drawable="@color/transparent" /><!--最下层图片 实例中蓝色部分-->
+     <item
+         android:id="@android:id/secondaryProgress"
+         android:drawable="@color/app_green" /><!--显示第二进度的那个 实例中绿色部分-->
+      <item
+          android:id="@android:id/progress"
+          android:drawable="@color/seek_bar_select" /><!--显示当前进度的图片就是该实例中上面白色部分-->
+    </layer-list>
+

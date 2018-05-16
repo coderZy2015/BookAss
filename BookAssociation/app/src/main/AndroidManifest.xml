@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.glwz.bookassociation">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- if you want to load images from a file OR from the internet -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- WX need internet -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".MyAppaction"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".ui.activity.HomePageActivtiy">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.activity.BookMenuActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.activity.MainBookMoreActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.activity.BookPlayingSceneActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.activity.SeeAllBookActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.activity.BuyAllBookActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.activity.SearchFinishActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.activity.RegisterActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.activity.ChangePasswordActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.activity.BookMenuChinaActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.activity.BookMenuChinaDetailActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".ui.activity.BaseActivity" />
+        <activity android:name=".ui.activity.BookChinaMenuListActivity"></activity>
+    </application>
+
+</manifest>

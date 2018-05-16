@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+   <RelativeLayout
+       android:id="@+id/edit_layout"
+       android:layout_width="match_parent"
+       android:layout_height="40dp"
+       android:focusable="true"
+       android:focusableInTouchMode="true"
+       android:background="@color/app_green">
+
+       <EditText
+           android:id="@+id/main_select_edit"
+           android:layout_width="match_parent"
+           android:layout_height="25dp"
+           android:layout_marginLeft="10dp"
+           android:layout_marginRight="10dp"
+           android:maxLines="1"
+           android:hint="搜索"
+           android:background="@drawable/corner_white"
+           android:textSize="14sp"
+           android:textColor="@color/black"
+           android:gravity="center"
+           android:layout_centerInParent="true"
+           android:maxLength="20"
+           android:imeOptions="actionSearch"/>
+   </RelativeLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">冠林听书</string>
+
+    <string name="assocaiation_book">冠林图书会</string>
+
+    <string name="main_msg">首页</string>
+    <string name="person_msg">我的</string>
+    <string name="mine_introduce">读书使人心明眼亮</string>
+    <string name="mine_name">读者</string>
+    <string name="already_see">看过</string>
+    <string name="already_buy">买过</string>
+    <string name="book_more">更多></string>
+    <string name="cost_introduce">本章节不是免费章节,请先购买</string>
+    <string name="cost_buy_first">确认购买</string>
+    <string name="cost_name">书名</string>
+    <string name="cost_price">本书价格:</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_phone">手机号码</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in">登录</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_length">手机号码长度不对</string>
+    <string name="error_invalid_password">密码至少6位</string>
+    <string name="error_field_required">用户名不能为空</string>
+    <string name="new_user_register">新用户注册</string>
+    <string name="forget_password">忘记密码？</string>
+</resources>

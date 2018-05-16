@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="22dp"
+            android:background="@color/app_green"/>
+        <ImageView
+            android:id="@+id/main_list_title_green_bar2"
+            android:layout_width="10dp"
+            android:layout_height="22dp"
+            android:layout_marginLeft="10dp"
+            android:background="@color/white"/>
+
+        <TextView
+            android:id="@+id/main_list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
+            android:text=" 测试"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/main_list_more"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:gravity="center"
+            android:text="更多>"
+            android:textColor="@color/app_green"
+            android:textSize="16sp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/menu_info_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/bg_app"/>
+
+</LinearLayout>
