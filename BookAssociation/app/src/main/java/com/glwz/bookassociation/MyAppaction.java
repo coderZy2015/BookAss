@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.blankj.utilcode.util.Utils;
 import com.lzy.okgo.OkGo;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
@@ -52,6 +54,8 @@ public class MyAppaction extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Logger.addLogAdapter(new AndroidLogAdapter());
 
         this.OkGoInit();
         this.utilInit();

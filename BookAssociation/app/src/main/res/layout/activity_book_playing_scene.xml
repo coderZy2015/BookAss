@@ -4,11 +4,13 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.glwz.bookassociation.ui.activity.BookPlayingSceneActivity">
     
 
     <com.glwz.bookassociation.ui.utils.MyScrollView
         android:id="@+id/myScrollView"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -170,22 +172,21 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:background="@color/bg_app" />
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="5dp"-->
+                <!--android:background="@color/bg_app" />-->
 
             <TextView
-                android:id="@+id/book_content"
+                android:id="@+id/html_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="left"
+                android:layout_height="match_parent"
                 android:letterSpacing="0.03"
                 android:lineSpacingExtra="2dp"
-                android:text="添加的测试内容"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:text=""
+                android:textSize="16sp" />
+
+
         </LinearLayout>
     </com.glwz.bookassociation.ui.utils.MyScrollView>
 

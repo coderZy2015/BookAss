@@ -76,6 +76,8 @@ public class BookMenuChinaActivity extends BaseActivity implements HttpAPICallBa
         book_id = getIntent().getStringExtra("book_id");
         price = getIntent().getStringExtra("price");
 
+        sharePreferenceUtil.setImgData(book_id, pic_name);
+
         btn_back = findViewById(R.id.btn_back);
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,7 +228,10 @@ public class BookMenuChinaActivity extends BaseActivity implements HttpAPICallBa
     private void weChatPay(GetPreOrderBean weChatBean) {
         IWXAPI payApi = WXAPIFactory.createWXAPI(BookMenuChinaActivity.this, weChatBean.getAppid(),
                 false);
-
+        if(!payApi.isWXAppInstalled()){
+            //未安装的处理
+            ToastUtils.showShort("未安装微信");
+        }
         payApi.registerApp(weChatBean.getAppid());
 
         PayReq payReq = new PayReq();

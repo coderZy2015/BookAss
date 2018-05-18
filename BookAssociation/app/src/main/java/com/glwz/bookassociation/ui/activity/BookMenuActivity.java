@@ -331,7 +331,10 @@ public class BookMenuActivity extends BaseActivity implements HttpAPICallBack {
     private void weChatPay(GetPreOrderBean weChatBean) {
         IWXAPI payApi = WXAPIFactory.createWXAPI(BookMenuActivity.this, weChatBean.getAppid(),
                 false);
-
+        if(!payApi.isWXAppInstalled()){
+            //未安装的处理
+            ToastUtils.showShort("未安装微信");
+        }
         payApi.registerApp(weChatBean.getAppid());
 
         PayReq payReq = new PayReq();

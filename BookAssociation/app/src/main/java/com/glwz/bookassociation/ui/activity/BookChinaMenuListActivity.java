@@ -89,6 +89,8 @@ public class BookChinaMenuListActivity extends BaseActivity implements HttpAPICa
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+
+
         adapter = new BookMenuChinaContentAdapter(this, dataList);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -150,7 +152,6 @@ public class BookChinaMenuListActivity extends BaseActivity implements HttpAPICa
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onMessageEvent(BookChinaEvent event) {
-        ToastUtils.showShort("过来了");
 
         book_id = event.getBook_id();
         pic_name = event.getPic_name();
@@ -160,6 +161,10 @@ public class BookChinaMenuListActivity extends BaseActivity implements HttpAPICa
         dataList.addAll(event.getObject());
         adapter.notifyDataSetChanged();
         convertData();
+        if (!sharePreferenceUtil.getUserName().equals("")) {
+            HomeAPI.GetBookIsBuy(BookChinaMenuListActivity.this, book_id, sharePreferenceUtil.getUserName());
+        }
+
         // 移除粘性事件
         EventBus.getDefault().removeStickyEvent(event);
     }
@@ -217,12 +222,12 @@ public class BookChinaMenuListActivity extends BaseActivity implements HttpAPICa
             if (bean != null) {
                 if (bean.getMsg().equals("true")) {
                     MediaPlayControl.getInstance().setBookState(true);
-                    adapter.setOpenAllBook(false);
+                    adapter.setOpenAllBook(true);
                     adapter.notifyDataSetChanged();
 
                 } else {
                     MediaPlayControl.getInstance().setBookState(false);
-                    adapter.setOpenAllBook(true);
+                    adapter.setOpenAllBook(false);
                     adapter.notifyDataSetChanged();
                 }
             }

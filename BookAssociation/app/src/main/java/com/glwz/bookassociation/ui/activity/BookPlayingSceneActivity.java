@@ -14,8 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
-import android.text.Html;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,9 +44,11 @@ import com.glwz.bookassociation.ui.utils.MediaPlayControl;
 import com.glwz.bookassociation.ui.utils.MyScrollView;
 import com.glwz.bookassociation.ui.utils.SharePreferenceUtil;
 import com.glwz.bookassociation.ui.utils.Utils;
+import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.zzhoujay.richtext.RichText;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -82,7 +82,8 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
     private TextView book_play_bar_total;
     private ImageView book_play_tuihou, book_play_play, book_play_next, book_play_back;
     private LinearLayout layout;
-    private TextView book_content;
+    //private TextView book_content;
+    private TextView html_text;//HtmlText
     private upDateSeekBar update; // 更新进度条用
 
     private SharePreferenceUtil sharePreferenceUtil;
@@ -102,6 +103,8 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
 
     private String detilUrl = "";
 
+    private Handler uiHandler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,11 +114,11 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
         title_name = getIntent().getStringExtra("title_name");
         book_id = getIntent().getStringExtra("book_id");
         price = getIntent().getStringExtra("price");
+        //初始化富文本控件
+        RichText.initCacheDir(this);
         //初始化控件
         initView();
         initPlayView();
-
-
         //经典中国
         if (book_id.equals("73")){
             detilUrl = "http://student.hebeijiaoyu.com.cn/glwz/web/interface/view/1/";
@@ -127,12 +130,13 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
     }
 
     private void initView() {
-        myScrollView = (MyScrollView) findViewById(R.id.myScrollView);
-        layout01 = (LinearLayout) findViewById(R.id.layout01);
-        layout02 = (LinearLayout) findViewById(R.id.layout02);
-        rlayout = (RelativeLayout) findViewById(R.id.rlayout);
+        myScrollView = findViewById(R.id.myScrollView);
+        layout01 = findViewById(R.id.layout01);
+        layout02 =  findViewById(R.id.layout02);
+        rlayout =  findViewById(R.id.rlayout);
         myScrollView.setOnScrollListener(this);
-        book_content = findViewById(R.id.book_content);
+        //book_content = findViewById(R.id.book_content);
+        html_text = findViewById(R.id.html_text);
         update = new upDateSeekBar(); // 创建更新进度条对象
         new Thread(update).start(); // 启动线程，更新进度条
     }
@@ -400,14 +404,15 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
                 layout01.addView(layout);
 
                 int l_h = layout02.getBottom() - searchLayoutTop;
-                book_content.setPadding(0, l_h, 0, 0);
-
+                //book_content.setPadding(0, l_h, 0, 0);
+                html_text.setPadding(0, l_h, 0, 0);
             }
         } else {
             if (layout.getParent() != layout02) {
                 layout01.removeView(layout);
                 layout02.addView(layout);
-                book_content.setPadding(0, 0, 0, 0);
+                //book_content.setPadding(0, 0, 0, 0);
+                html_text.setPadding(0, 0, 0, 0);
             }
         }
     }
@@ -426,20 +431,20 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
                             "  " +
                             "  朗读者：" + bean.getMessage().getView().getReader());
 
-                    if (!detilUrl.equals("http://student.hebeijiaoyu.com.cn/glwz/web/interface/view/1/")){
-                        //内容
-                        book_content.setText(Html.fromHtml("" + bean.getMessage().getView()
-                                .getContent()));
+                    final String htmlContent = bean.getMessage().getView().getContent();
 
-                    }else{
-                        book_content.setText("");
-                    }
-                    Log.i("zy_code", "getContent    ====   "+Html.fromHtml("" + bean.getMessage().getView()
-                            .getContent()));
-//                    //内容
-//                    book_content.setText(Html.fromHtml("" + bean.getMessage().getView()
-//                            .getContent()));
+                    uiHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            String content = htmlContent;
+                            content = insertStr(content, 0);
 
+                            Logger.i(content);
+
+                            RichText.fromHtml(content).into(html_text);
+
+                        }
+                    });
                 }
             }
         }
@@ -462,6 +467,35 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
     public void onError(BaseBean response) {
 
     }
+
+    public String insertStr(String content, int fromIndex){
+        String backStr = content;
+        String insertStr = "http://student.hebeijiaoyu.com.cn";
+
+        int lastIndex = backStr.lastIndexOf("/glwz");
+        if (lastIndex == -1){
+            return backStr;
+        }
+        Logger.i("lastIndex = "+lastIndex);
+
+        backStr = backStr.replaceAll("/glwz", insertStr+"/glwz");
+
+        //backStr = backStr.replaceAll(" alt=\"\"","");
+
+//        backStr = "<B>Start</B> \n" +
+//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
+//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
+//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
+//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
+//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
+//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
+//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
+//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
+//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
+//                "<B>End</B>";
+        return backStr;
+    }
+
 
     public boolean checkUserName() {
         if (sharePreferenceUtil.getUserName().equals("")) {
@@ -554,7 +588,10 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
     private void weChatPay(GetPreOrderBean weChatBean) {
         IWXAPI payApi = WXAPIFactory.createWXAPI(this, weChatBean.getAppid(),
                 false);
-
+        if(!payApi.isWXAppInstalled()){
+            //未安装的处理
+            ToastUtils.showShort("未安装微信");
+        }
         payApi.registerApp(weChatBean.getAppid());
 
         PayReq payReq = new PayReq();
