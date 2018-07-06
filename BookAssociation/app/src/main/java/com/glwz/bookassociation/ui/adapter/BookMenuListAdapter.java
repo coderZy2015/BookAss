@@ -17,11 +17,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.glwz.bookassociation.Interface.OnItemClickListener;
+import com.glwz.bookassociation.MyData;
 import com.glwz.bookassociation.R;
 import com.glwz.bookassociation.ui.Entity.BookMenuInfo;
 import com.glwz.bookassociation.ui.activity.BookMenuActivity;
 import com.glwz.bookassociation.ui.utils.Utils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -100,6 +102,14 @@ public class BookMenuListAdapter extends RecyclerView.Adapter {
             if (isShowPrice){
                 float pr = Integer.parseInt(price);
                 hViewHolder.text_price.setText("￥ "+pr/100);
+                if (MyData.isMiguMember){
+                    pr = pr*0.88f;
+                    pr = pr/100;
+                    BigDecimal bg = new BigDecimal(pr);
+                    double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+                    hViewHolder.text_price.setText(""+ f1);
+                }
                 hViewHolder.btn_buy.setVisibility(View.VISIBLE);
             }else{
                 hViewHolder.text_price.setText("");

@@ -112,27 +112,12 @@ public class MainDataItemAdapter extends RecyclerView.Adapter {
         if (holder instanceof MainDataItemAdapter.HeaderViewHolder) {//轮播图
 
         } else if (holder instanceof MainDataItemAdapter.HorizontalViewHolder) {//上方滑动栏
+
             MainDataItemAdapter.HorizontalViewHolder vewHolder = (MainDataItemAdapter
                     .HorizontalViewHolder) holder;
             if (vewHolder.mRecyclerView.getAdapter() == null) {
-                MainDataTopBarItemAdapter adapter = new MainDataTopBarItemAdapter(context, list);
+                final MainDataTopBarItemAdapter adapter = new MainDataTopBarItemAdapter(context, list);
                 vewHolder.mRecyclerView.setAdapter(adapter);
-                adapter.setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onClick(int position) {
-                        Intent intent = new Intent();
-                        intent.setClass(context, MainBookMoreActivity.class);
-                        intent.putExtra("cate_id", list.get(position).getCat_id());
-                        intent.putExtra("title_name", list.get(position).getCat_title());
-
-
-                        context.startActivity(intent);
-                    }
-
-                    @Override
-                    public void onLongClick(int position) {
-                    }
-                });
             } else {
                 vewHolder.mRecyclerView.getAdapter().notifyDataSetChanged();
             }
@@ -274,6 +259,7 @@ public class MainDataItemAdapter extends RecyclerView.Adapter {
                             BannerData data = new BannerData();
                             Intent intent = new Intent();
                             intent.setClass(itemView.getContext(), BookMenuActivity.class);
+
                             String keycode = "";
                             String title = "";
                             String pic_name = "";

@@ -64,7 +64,6 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
                     EventBusMessageModel event = new EventBusMessageModel();
                     event.setType(AppConstant.PAY_SUCCESS);
                     EventBus.getDefault().post(event);
-
                     break;
                 case BaseResp.ErrCode.ERR_USER_CANCEL://取消支付
                     ToastUtils.showShort("支付取消");

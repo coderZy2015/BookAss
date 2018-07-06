@@ -10,7 +10,13 @@ public class MyData {
 
     public static final String SAVE_USER = "saveUserParent";// 保存用户信息的xml文件名
 
-    public static String userName = "";
-    public static String passWord = "";
+    /**
+     * 是否咪咕会员
+     */
+    public static boolean isMiguMember = false;
 
+    /**
+     * 优惠券数量
+     */
+    public static String CouponNum = "0";
 }

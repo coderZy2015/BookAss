@@ -60,11 +60,11 @@
         <activity
             android:name=".ui.activity.BookMenuChinaActivity"
             android:launchMode="singleTask" />
-        <activity
-            android:name=".ui.activity.BookMenuChinaDetailActivity"
-            android:launchMode="singleTask" />
         <activity android:name=".ui.activity.BaseActivity" />
-        <activity android:name=".ui.activity.BookChinaMenuListActivity"></activity>
+        <activity android:name=".ui.activity.BookChinaMenuListActivity" />
+        <activity android:name=".ui.activity.BookAssociation" />
+        <activity android:name=".ui.activity.EnterBookActivity" />
+        <activity android:name=".ui.activity.MyCouponActivity"></activity>
     </application>
 
 </manifest>

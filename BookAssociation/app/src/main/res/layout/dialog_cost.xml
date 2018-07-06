@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="10dp"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        app:cardCornerRadius="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,94 +20,138 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/cost_buy_first"
                     android:gravity="center"
+                    android:text="@string/cost_buy_first"
                     android:textColor="@color/black"
-                    android:textSize="16sp"/>
+                    android:textSize="17sp" />
 
                 <ImageView
                     android:id="@+id/cost_close"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/cost_close"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/cost_close" />
 
             </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/cost_indruce"
-                android:textSize="13sp"
-                android:gravity="left"
                 android:layout_marginTop="15dp"
+                android:gravity="left"
                 android:paddingLeft="30dp"
-                android:text="@string/cost_introduce"/>
+                android:text="@string/cost_introduce"
+                android:textColor="@color/cost_indruce"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/book_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/cost_indruce"
-                android:textSize="13sp"
+                android:layout_marginTop="13dp"
                 android:gravity="left"
                 android:paddingLeft="30dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/cost_name"/>
+                android:text="@string/cost_name"
+                android:textColor="@color/cost_indruce"
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="13dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/cost_indruce"
-                    android:textSize="13sp"
                     android:gravity="left"
                     android:paddingLeft="30dp"
-                    android:text="@string/cost_price"/>
+                    android:text="@string/cost_price"
+                    android:textColor="@color/cost_indruce"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/book_price"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/cost_text"
-                    android:textSize="13sp"
                     android:gravity="left"
                     android:paddingLeft="10dp"
-                    android:text="￥998"/>
+                    android:text="￥0"
+                    android:textColor="@color/cost_text"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/book_new_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:paddingLeft="10dp"
+                    android:text="￥0"
+                    android:visibility="gone"
+                    android:textColor="@color/cost_text"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:id="@+id/txt_no_daijin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:layout_centerVertical="true"
+                    android:text="暂无可使用的代金券"
+
+                    android:textColor="@color/cost_indruce"
+                    android:textSize="14sp" />
+
+                <CheckBox
+                    android:id="@+id/btn_selet_daijin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="使用10元代金券"
+                    android:layout_marginLeft="30dp"
+                    android:textColor="@color/cost_text"
+                    android:textSize="14sp"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone"
+                    android:button="@null"
+                    android:drawablePadding="8dp"
+                    android:drawableRight="@drawable/check_select"  />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
 
                 <Button
                     android:id="@+id/cost_sure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:background="@drawable/corner_dialog_rect"
                     android:text="购 买"
-                    android:textColor="@color/white"
-                    android:background="@drawable/corner_dialog_rect"/>
+                    android:textColor="@color/white" />
             </RelativeLayout>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="@color/white"/>
+                android:background="@color/white" />
 
         </LinearLayout>
 

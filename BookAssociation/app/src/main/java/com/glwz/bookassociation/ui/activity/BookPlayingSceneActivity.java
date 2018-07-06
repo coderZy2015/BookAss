@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +23,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -52,6 +55,8 @@ import com.zzhoujay.richtext.RichText;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.math.BigDecimal;
+
 /**
  * 书本的详情页
  * Created by zy on 2018/4/27.
@@ -73,7 +78,6 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
     public static final String ACTION_PLAY_AND_PAUSE = "play_song";
     public static final String ACTION_NEXT_SONG = "next_song";
     public static final String ACTION_EXIT = "exit_song";
-
     //---------------------------------
     private TextView book_play_title;
     private TextView book_play_introduce;
@@ -103,6 +107,8 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
 
     private String detilUrl = "";
 
+    private boolean useCoupon = false;
+
     private Handler uiHandler = new Handler();
 
     @Override
@@ -120,9 +126,9 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
         initView();
         initPlayView();
         //经典中国
-        if (book_id.equals("73")){
+        if (book_id.equals("73")) {
             detilUrl = "http://student.hebeijiaoyu.com.cn/glwz/web/interface/view/1/";
-        }else{
+        } else {
             detilUrl = HttpUrl.BookContent_Url;
         }
 
@@ -132,8 +138,8 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
     private void initView() {
         myScrollView = findViewById(R.id.myScrollView);
         layout01 = findViewById(R.id.layout01);
-        layout02 =  findViewById(R.id.layout02);
-        rlayout =  findViewById(R.id.rlayout);
+        layout02 = findViewById(R.id.layout02);
+        rlayout = findViewById(R.id.rlayout);
         myScrollView.setOnScrollListener(this);
         //book_content = findViewById(R.id.book_content);
         html_text = findViewById(R.id.html_text);
@@ -468,31 +474,18 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
 
     }
 
-    public String insertStr(String content, int fromIndex){
+    public String insertStr(String content, int fromIndex) {
         String backStr = content;
         String insertStr = "http://student.hebeijiaoyu.com.cn";
 
         int lastIndex = backStr.lastIndexOf("/glwz");
-        if (lastIndex == -1){
+        if (lastIndex == -1) {
             return backStr;
         }
-        Logger.i("lastIndex = "+lastIndex);
+        Logger.i("lastIndex = " + lastIndex);
 
-        backStr = backStr.replaceAll("/glwz", insertStr+"/glwz");
+        backStr = backStr.replaceAll("/glwz", insertStr + "/glwz");
 
-        //backStr = backStr.replaceAll(" alt=\"\"","");
-
-//        backStr = "<B>Start</B> \n" +
-//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
-//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
-//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
-//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
-//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
-//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
-//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
-//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
-//                "<img src='http://wx1.sinaimg.cn/mw690/eaaf2affly1fihvjpekzwj21el0qotfq.jpg' />\n" +
-//                "<B>End</B>";
         return backStr;
     }
 
@@ -529,11 +522,45 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
 
         TextView book_name = layout.findViewById(R.id.book_name);
         ImageView cancle = layout.findViewById(R.id.cost_close);
-        Button sure = layout.findViewById(R.id.cost_sure);
         TextView book_price = layout.findViewById(R.id.book_price);
+        Button sure = layout.findViewById(R.id.cost_sure);
         book_name.setText("书名：" + title_name);
-        float pr = Integer.parseInt(price);
-        book_price.setText("" + pr / 100);
+
+        TextView book_new_price = layout.findViewById(R.id.book_new_price);
+
+        TextView txt_no_daijin = layout.findViewById(R.id.txt_no_daijin);
+        CheckBox btn_select_daijin = layout.findViewById(R.id.btn_selet_daijin);
+        if (Integer.parseInt(MyData.CouponNum) > 0){
+            txt_no_daijin.setVisibility(View.GONE);
+            btn_select_daijin.setVisibility(View.VISIBLE);
+        }
+        btn_select_daijin.setChecked(false);
+
+        btn_select_daijin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    useCoupon = true;
+                }else{
+                    useCoupon = false;
+                }
+            }
+        });
+
+        if (!price.equals("")){
+            float pr = Integer.parseInt(price);
+            book_price.setText(""+ pr/100);
+            if (MyData.isMiguMember){
+                pr = pr*0.88f;
+                pr = pr/100;
+                BigDecimal bg = new BigDecimal(pr);
+                double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                book_price.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG|Paint.ANTI_ALIAS_FLAG);
+                book_price.setTextColor(getResources().getColor(R.color.cost_indruce));
+                book_new_price.setVisibility(View.VISIBLE);
+                book_new_price.setText(""+ f1);
+            }
+        }
 
         ViewGroup.LayoutParams param = sure.getLayoutParams();
         param.width = display.getWidth() * 3 / 5;
@@ -550,8 +577,16 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
             public void onClick(View view) {
                 isShowDialog = false;
                 costDialog.dismiss();
-                //发起微信支付
-                HomeAPI.createOrder(BookPlayingSceneActivity.this, "15833113069", "" + book_id);
+                //获取订单信息
+
+                if (!useCoupon){
+                    HomeAPI.createOrder(BookPlayingSceneActivity.this, sharePreferenceUtil.getUserName(), ""
+                            + book_id, "0");
+                }else{
+                    HomeAPI.createOrder(BookPlayingSceneActivity.this, sharePreferenceUtil.getUserName(), ""
+                            + book_id, "1");
+                }
+
             }
         });
     }
@@ -588,7 +623,7 @@ public class BookPlayingSceneActivity extends BaseActivity implements MyScrollVi
     private void weChatPay(GetPreOrderBean weChatBean) {
         IWXAPI payApi = WXAPIFactory.createWXAPI(this, weChatBean.getAppid(),
                 false);
-        if(!payApi.isWXAppInstalled()){
+        if (!payApi.isWXAppInstalled()) {
             //未安装的处理
             ToastUtils.showShort("未安装微信");
         }

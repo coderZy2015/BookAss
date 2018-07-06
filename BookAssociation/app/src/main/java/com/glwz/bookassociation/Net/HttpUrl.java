@@ -9,8 +9,7 @@ public class HttpUrl {
     /**
      * 登录平台地址  拼接
      */
-    public static final String Login_Url = "http://student.hebeijiaoyu.com" +
-            ".cn/glwz/user/weixin/userCheck/";
+    public static final String Login_Url = "http://student.hebeijiaoyu.com.cn/glwz/user/weixin/userCheck/";
     /**
      * 注册平台地址  传参
      */
@@ -69,4 +68,11 @@ public class HttpUrl {
      * 查询资源是否购买
      */
     public static final String GetBookIsBuy_Url = "http://student.hebeijiaoyu.com.cn/glwz/gltsApp/isBuy";
+
+    /**
+     * 有优惠卷的个数
+     */
+    public static final String IsHaveCoupon = "http://student.hebeijiaoyu.com.cn/glwz/gltsApp/cardNum";
+
+
 }

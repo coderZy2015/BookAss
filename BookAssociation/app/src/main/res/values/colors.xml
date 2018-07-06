@@ -12,11 +12,13 @@
     <color name="app_background_color">#F9F9F9</color>
     <color name="app_green">#44BB57</color>
     <color name="bg_app">#F1F1F1</color>
+    <color name="btn_open">#40c6a5</color>
     <color name="seek_bar_select">#FF7F27</color>
     <color name="app_topbar_color">#44BB57</color>
     <color name="transparent">#00000000</color>
     <color name="cost_text">#FF7F27</color>
     <color name="tab_unselect">#c9c9c9</color>
+    <color name="coupon_color">#ff9e01</color>
     <color name="bg_btn">#dadada</color>
     <color name="cost_indruce">#9A9A9A</color>
 </resources>

@@ -3,6 +3,7 @@ package com.glwz.bookassociation.ui.activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -46,6 +49,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
@@ -73,6 +77,8 @@ public class BookMenuActivity extends BaseActivity implements HttpAPICallBack {
      * 显示dialog
      */
     private boolean isShowDialog = false;
+
+    private boolean useCoupon = false;//默认不使用代价卷
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -300,9 +306,40 @@ public class BookMenuActivity extends BaseActivity implements HttpAPICallBack {
         Button sure = layout.findViewById(R.id.cost_sure);
         book_name.setText("书名：" + title_name);
 
+        TextView book_new_price = layout.findViewById(R.id.book_new_price);
+
+        TextView txt_no_daijin = layout.findViewById(R.id.txt_no_daijin);
+        CheckBox btn_select_daijin = layout.findViewById(R.id.btn_selet_daijin);
+        if (Integer.parseInt(MyData.CouponNum) > 0){
+            txt_no_daijin.setVisibility(View.GONE);
+            btn_select_daijin.setVisibility(View.VISIBLE);
+        }
+        btn_select_daijin.setChecked(false);
+
+        btn_select_daijin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    useCoupon = true;
+                }else{
+                    useCoupon = false;
+                }
+            }
+        });
+
         if (!price.equals("")){
             float pr = Integer.parseInt(price);
             book_price.setText(""+ pr/100);
+            if (MyData.isMiguMember){
+                pr = pr*0.88f;
+                pr = pr/100;
+                BigDecimal bg = new BigDecimal(pr);
+                double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                book_price.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG|Paint.ANTI_ALIAS_FLAG);
+                book_price.setTextColor(getResources().getColor(R.color.cost_indruce));
+                book_new_price.setVisibility(View.VISIBLE);
+                book_new_price.setText(""+ f1);
+            }
         }
 
         ViewGroup.LayoutParams param = sure.getLayoutParams();
@@ -321,8 +358,15 @@ public class BookMenuActivity extends BaseActivity implements HttpAPICallBack {
                 isShowDialog = false;
                 costDialog.dismiss();
                 //获取订单信息
-                HomeAPI.createOrder(BookMenuActivity.this, sharePreferenceUtil.getUserName(), ""
-                        + book_id);
+
+                if (!useCoupon){
+                    HomeAPI.createOrder(BookMenuActivity.this, sharePreferenceUtil.getUserName(), ""
+                            + book_id, "0");
+                }else{
+                    HomeAPI.createOrder(BookMenuActivity.this, sharePreferenceUtil.getUserName(), ""
+                            + book_id, "1");
+                }
+
             }
         });
     }

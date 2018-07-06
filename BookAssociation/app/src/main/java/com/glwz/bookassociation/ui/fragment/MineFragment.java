@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.glwz.bookassociation.Interface.HttpAPICallBack;
@@ -21,6 +22,7 @@ import com.glwz.bookassociation.ui.Entity.BuyBookListBean;
 import com.glwz.bookassociation.ui.activity.BookMenuActivity;
 import com.glwz.bookassociation.ui.activity.BuyAllBookActivity;
 import com.glwz.bookassociation.ui.activity.LoginActivity;
+import com.glwz.bookassociation.ui.activity.MyCouponActivity;
 import com.glwz.bookassociation.ui.adapter.BuyBookAdapter;
 import com.glwz.bookassociation.ui.utils.SharePreferenceUtil;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -47,6 +49,7 @@ public class MineFragment extends SupportFragment implements View.OnClickListene
 
     private RelativeLayout buy_more;
     private Button mine_btn_login;
+    private LinearLayout btn_my_coupon;
     private RefreshLayout mRefreshLayout;
     private SharePreferenceUtil sharePreferenceUtil;
 
@@ -81,6 +84,9 @@ public class MineFragment extends SupportFragment implements View.OnClickListene
 
         mine_btn_login = view.findViewById(R.id.mine_btn_login);
         mine_btn_login.setOnClickListener(this);
+
+        btn_my_coupon = view.findViewById(R.id.btn_my_coupon);
+        btn_my_coupon.setOnClickListener(this);
 
         sharePreferenceUtil = new SharePreferenceUtil(_mActivity, MyData.SAVE_USER);
         if (!sharePreferenceUtil.getUserName().equals("")) {
@@ -144,10 +150,27 @@ public class MineFragment extends SupportFragment implements View.OnClickListene
             case R.id.mine_btn_login:
                 _mActivity.startActivity(new Intent().setClass(_mActivity, LoginActivity.class));
                 break;
+            case R.id.btn_my_coupon:
+                if (checkUserName())
+                _mActivity.startActivity(new Intent().setClass(_mActivity, MyCouponActivity.class));
+                break;
             default:
                 break;
         }
 
+    }
+
+    /*
+     * 检查登录名是否存在
+     */
+    public boolean checkUserName() {
+        if (sharePreferenceUtil.getUserName().equals("")) {
+            Intent intent = new Intent();
+            intent.setClass(_mActivity, LoginActivity.class);
+            startActivity(intent);
+            return false;
+        }
+        return true;
     }
 
     @Override

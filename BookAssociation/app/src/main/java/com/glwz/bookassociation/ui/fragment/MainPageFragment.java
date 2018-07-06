@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.glwz.bookassociation.Interface.HttpAPICallBack;
 import com.glwz.bookassociation.MyData;
 import com.glwz.bookassociation.Net.HomeAPI;
 import com.glwz.bookassociation.Net.HttpUrl;
 import com.glwz.bookassociation.R;
 import com.glwz.bookassociation.ui.Entity.BaseBean;
+import com.glwz.bookassociation.ui.Entity.CardNumBean;
 import com.glwz.bookassociation.ui.Entity.LoginBean;
 import com.glwz.bookassociation.ui.Entity.MainBookListBean;
 import com.glwz.bookassociation.ui.adapter.MainDataItemAdapter;
@@ -78,9 +80,6 @@ public class MainPageFragment extends SupportFragment implements HttpAPICallBack
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new MainDataItemAdapter(_mActivity, dataList);
-        recyclerView.setAdapter(adapter);
-
         if (!sp.getUserName().equals("")){
             HomeAPI.Login(this, HttpUrl.Login_Url, sp.getUserName(), sp.getPassword());
         }
@@ -97,7 +96,8 @@ public class MainPageFragment extends SupportFragment implements HttpAPICallBack
                 if (mBean.getData() != null) {
                     dataList.clear();
                     dataList.addAll(mBean.getData());
-                    adapter.notifyDataSetChanged();
+                    adapter = new MainDataItemAdapter(_mActivity, dataList);
+                    recyclerView.setAdapter(adapter);
                 }
 
             }
@@ -111,6 +111,24 @@ public class MainPageFragment extends SupportFragment implements HttpAPICallBack
                     sp.setPassword("");
                 }
 
+                //登录成功  mark = 3咪咕会员
+                if (bean.getMark().equals("0") || bean.getMark().equals("3")){
+                    if (bean.getMark().equals("3")){
+                        MyData.isMiguMember = true;
+                        HomeAPI.getHaveCoupon(this, sp.getUserName());
+                    }else{
+                        MyData.isMiguMember = false;
+                    }
+
+                    ToastUtils.showShort(bean.getMessage());
+                }
+
+            }
+        }
+        if (url_id == HomeAPI.NET_IsHaveCoupon){
+            CardNumBean bean = (CardNumBean)response;
+            if (bean != null){
+                MyData.CouponNum = bean.getCardNum();
             }
         }
 

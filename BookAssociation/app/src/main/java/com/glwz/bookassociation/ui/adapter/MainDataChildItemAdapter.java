@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.glwz.bookassociation.Interface.OnItemClickListener;
+import com.glwz.bookassociation.MyData;
 import com.glwz.bookassociation.R;
 import com.glwz.bookassociation.ui.Entity.MainBookListBean;
+import com.glwz.bookassociation.ui.utils.SharePreferenceUtil;
 
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class MainDataChildItemAdapter extends RecyclerView.Adapter<MainDataChild
     private Context context;
     private OnItemClickListener mOnItemClickListener;
     private List<MainBookListBean.DataBean.BooksBean> list;
+    private SharePreferenceUtil sp;
     /**
      * 构造函数
      * @param context
@@ -36,6 +39,7 @@ public class MainDataChildItemAdapter extends RecyclerView.Adapter<MainDataChild
     public MainDataChildItemAdapter(Context context, List<MainBookListBean.DataBean.BooksBean> list) {
         this.context = context;
         this.list = list;
+        sp = new SharePreferenceUtil(context, MyData.SAVE_USER);
     }
 
     @Override
@@ -47,6 +51,9 @@ public class MainDataChildItemAdapter extends RecyclerView.Adapter<MainDataChild
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Glide.with(context).load(list.get(position).getImg()).into(holder.imageInfo);
+        //存储图片
+        sp.setImgData(list.get(position).getId(), list.get(position).getImg());
+
         holder.textInfo.setText(list.get(position).getTitle());
         if( mOnItemClickListener!= null){
             holder.itemView.setOnClickListener( new View.OnClickListener() {

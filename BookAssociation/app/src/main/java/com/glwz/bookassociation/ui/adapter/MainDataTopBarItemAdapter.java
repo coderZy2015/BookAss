@@ -1,6 +1,7 @@
 package com.glwz.bookassociation.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.glwz.bookassociation.Interface.OnItemClickListener;
 import com.glwz.bookassociation.R;
 import com.glwz.bookassociation.ui.Entity.MainBookListBean;
+import com.glwz.bookassociation.ui.activity.EnterBookActivity;
+import com.glwz.bookassociation.ui.activity.MainBookMoreActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,20 +23,25 @@ import java.util.List;
  */
 
 public class MainDataTopBarItemAdapter extends RecyclerView.Adapter<MainDataTopBarItemAdapter.ViewHolder> {
-    private List<MainBookListBean.DataBean> mList;
+    private List<MainBookListBean.DataBean> mList = new ArrayList<>();
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    private OnItemClickListener mOnItemClickListener;
 
    public MainDataTopBarItemAdapter(Context context, List<MainBookListBean.DataBean> _list){
        mContext = context;
-       mList = _list;
+       mList.addAll(_list);
        mLayoutInflater = LayoutInflater.from(context);
+       updateData();
    }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener ){
-        this.mOnItemClickListener = onItemClickListener;
-    }
+   public void updateData(){
+       MainBookListBean.DataBean bookBean = new MainBookListBean.DataBean();
+       bookBean.setCat_title("冠林悦听会");
+       bookBean.setCat_id("---");
+       mList.add(0, bookBean);
+       notifyDataSetChanged();
+   }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -43,21 +51,22 @@ public class MainDataTopBarItemAdapter extends RecyclerView.Adapter<MainDataTopB
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.mTextView.setText(""+mList.get(position).getCat_title());
-        if( mOnItemClickListener!= null){
-            holder.itemView.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnItemClickListener.onClick(position);
+        holder.itemView.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent();
+                intent.setClass(mContext, MainBookMoreActivity.class);
+                if (mList.get(position).getCat_id().equals("---")){
+                    intent.setClass(mContext, EnterBookActivity.class);
                 }
-            });
-            holder.itemView.setOnLongClickListener( new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    mOnItemClickListener.onLongClick(position);
-                    return false;
-                }
-            });
-        }
+                intent.putExtra("cate_id", mList.get(position).getCat_id());
+                intent.putExtra("title_name", mList.get(position).getCat_title());
+
+
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override

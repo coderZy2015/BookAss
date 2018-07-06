@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.glwz.bookassociation.Interface.OnItemClickListener;
+import com.glwz.bookassociation.MyData;
 import com.glwz.bookassociation.R;
 import com.glwz.bookassociation.ui.Entity.BookTypeListBean;
+import com.glwz.bookassociation.ui.utils.SharePreferenceUtil;
 
 import java.util.ArrayList;
 
@@ -26,6 +28,7 @@ public class MainBookMoreDataItemAdapter extends RecyclerView.Adapter<MainBookMo
     private Context context;
     private ArrayList<BookTypeListBean.DataBean> mList; // List 集合（里面是image+text）
     private OnItemClickListener mOnItemClickListener;
+    private SharePreferenceUtil sharePreferenceUtil;
     /**
      * 构造函数
      * @param context
@@ -34,6 +37,7 @@ public class MainBookMoreDataItemAdapter extends RecyclerView.Adapter<MainBookMo
     public MainBookMoreDataItemAdapter(Context context, ArrayList<BookTypeListBean.DataBean> list) {
         this.context = context;
         this.mList = list;
+        sharePreferenceUtil = new SharePreferenceUtil(context, MyData.SAVE_USER);
     }
 
     @Override
@@ -44,25 +48,27 @@ public class MainBookMoreDataItemAdapter extends RecyclerView.Adapter<MainBookMo
 
     @Override
     public void onBindViewHolder(MainBookMoreDataItemAdapter.ViewHolder holder, final int position) {
+        //存储图片
+        sharePreferenceUtil.setImgData(mList.get(position).getId(), mList.get(position).getImg());
 
         Glide.with(context).load(mList.get(position).getImg()).into(holder.imageInfo);
         holder.textInfo.setText(mList.get(position).getTitle());
         if( mOnItemClickListener!= null){
-            holder.itemView.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnItemClickListener.onClick(position);
-                }
-            });
-            holder.itemView.setOnLongClickListener( new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    mOnItemClickListener.onLongClick(position);
-                    return false;
-                }
-            });
-        }
+        holder.itemView.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onClick(position);
+            }
+        });
+        holder.itemView.setOnLongClickListener( new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mOnItemClickListener.onLongClick(position);
+                return false;
+            }
+        });
     }
+}
 
     @Override
     public int getItemCount() {

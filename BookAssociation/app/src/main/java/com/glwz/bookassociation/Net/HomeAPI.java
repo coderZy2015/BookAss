@@ -11,12 +11,17 @@ import com.glwz.bookassociation.ui.Entity.BookMenuInfo;
 import com.glwz.bookassociation.ui.Entity.BookSearchBean;
 import com.glwz.bookassociation.ui.Entity.BookTypeListBean;
 import com.glwz.bookassociation.ui.Entity.BuyBookListBean;
+import com.glwz.bookassociation.ui.Entity.CardNumBean;
 import com.glwz.bookassociation.ui.Entity.GetPreOrderBean;
 import com.glwz.bookassociation.ui.Entity.LoginBean;
 import com.glwz.bookassociation.ui.Entity.MainBookListBean;
+import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Created by zy on 2018/4/23.
@@ -38,6 +43,7 @@ public class HomeAPI {
     public static final int NET_GetPreOrder = 10;
     public static final int NET_BookIsBuy = 11;
     public static final int NET_BuyBookList = 12;
+    public static final int NET_IsHaveCoupon = 13;
 
     /**
      * 登录接口   密码需要使用md5加密拼接
@@ -115,6 +121,8 @@ public class HomeAPI {
      */
     public static void register(final HttpAPICallBack callBack, String phone, String password1,
                                 String yzm) {
+
+        Type type = new TypeToken<List<String>>(){}.getType();
 
         OkGo.<LoginBean>get(HttpUrl.Register_Url)
                 .params("phone", phone)
@@ -297,12 +305,14 @@ public class HomeAPI {
 
     /**
      * 获取微信支付 pre_id接口
+     * useCard 1使用代金券  0不使用代金券
      */
-    public static void createOrder(final HttpAPICallBack callBack, String username, String id) {
+    public static void createOrder(final HttpAPICallBack callBack, String username, String id, String useCard) {
         String url = HttpUrl.CreateOrder_Url;
         HttpParams params = new HttpParams();
         params.put("username", username);
         params.put("id", id);
+        params.put("useCard", useCard);
         params.put("spbill_create_ip", "" + NetworkUtils.getIPAddress(true));
 
 
@@ -369,5 +379,28 @@ public class HomeAPI {
                     }
                 });
     }
+
+    /**
+     * 获取拥有的优惠券
+     */
+    public static void getHaveCoupon(final HttpAPICallBack callBack, String username) {
+
+        OkGo.<CardNumBean>get(  HttpUrl.IsHaveCoupon)
+                .params("username",username)
+                .execute(new JsonCallback<CardNumBean>(CardNumBean.class) {
+                    @Override
+                    public void onError(Response<CardNumBean> response) {
+                        super.onError(response);
+                        callBack.onError(response.body());
+                    }
+
+                    @Override
+                    public void onSuccess(Response<CardNumBean> response) {
+                        super.onSuccess(response);
+                        callBack.onSuccess(NET_IsHaveCoupon, response.body());
+                    }
+                });
+    }
+
 
 }

@@ -18,6 +18,7 @@ import com.glwz.bookassociation.Net.HomeAPI;
 import com.glwz.bookassociation.Net.HttpUrl;
 import com.glwz.bookassociation.R;
 import com.glwz.bookassociation.ui.Entity.BaseBean;
+import com.glwz.bookassociation.ui.Entity.CardNumBean;
 import com.glwz.bookassociation.ui.Entity.LoginBean;
 import com.glwz.bookassociation.ui.event.EventBusMessageModel;
 import com.glwz.bookassociation.ui.utils.SharePreferenceUtil;
@@ -134,20 +135,38 @@ public class LoginActivity extends BaseActivity implements HttpAPICallBack, View
 
     @Override
     public void onSuccess(int url_id, BaseBean response) {
-        LoginBean bean = (LoginBean)response;
-        if (bean != null){
-            //错误
-            if(bean.getMark().equals("1")){
-                ToastUtils.showShort(bean.getMessage());
-            }
-            if (bean.getMark().equals("0")){
-                sp.setUserName(phone);
-                sp.setPassword(password);
-                ToastUtils.showShort(bean.getMessage());
+        if (url_id == HomeAPI.NET_Login){
+            LoginBean bean = (LoginBean)response;
+            if (bean != null){
+                //错误
+                if(bean.getMark().equals("1")){
+                    ToastUtils.showShort(bean.getMessage());
+                }
+                //登录成功  mark = 3咪咕会员
+                if (bean.getMark().equals("0") || bean.getMark().equals("3")){
+                    sp.setUserName(phone);
+                    sp.setPassword(password);
+                    if (bean.getMark().equals("3")){
+                        MyData.isMiguMember = true;
+                        HomeAPI.getHaveCoupon(this, sp.getUserName());
+                    }else{
+                        MyData.isMiguMember = false;
+                        onBackPressed();
+                        _activity.finish();
+                    }
 
-                onBackPressed();
-                _activity.finish();
+                    ToastUtils.showShort(bean.getMessage());
+                }
             }
+        }
+
+        if (url_id == HomeAPI.NET_IsHaveCoupon){
+            CardNumBean beanC = (CardNumBean)response;
+            if (beanC != null){
+                MyData.CouponNum = beanC.getCardNum();
+            }
+            onBackPressed();
+            _activity.finish();
         }
     }
 
